@@ -1,0 +1,41 @@
+A -> B -> C (A skip to C)
+
+case when B.B != null || C.C != null
+then ...
+
+----
+
+B:
+
+case when B.B != null
+ then 'valid'
+when A.REF_B = null
+ then 'null'
+else 'invalid'
+
+C:
+
+case when C.C != null || B.C = null
+ then 'valid'
+when A.REF_C = null
+ then 'null'
+else 'invalid'
+
+
+case when ((
+	case when B.B != null
+	 then 'valid'
+	when A.REF_B = null
+	 then 'null'
+	else 'invalid'
+) = 'valid'
+||
+(
+	case when C.C != null || B.C = null
+	 then 'valid'
+	when A.REF_C = null
+	 then 'null'
+	else 'invalid'
+) = 'valid'
+then ...
+
